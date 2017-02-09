@@ -19,6 +19,7 @@ module.exports = {
     // allow debugger during development
     'no-debugger': process.env.NODE_ENV === 'production' ? 2 : 0,
     'semi':['error','always'],  //配置需要冒号才能通过编译
-    'indent':0
+    'indent':0,
+    'space-before-function-paren':0
   }
 }
