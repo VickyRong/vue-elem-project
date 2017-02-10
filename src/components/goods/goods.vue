@@ -3,7 +3,7 @@
     <!--左侧导航-->
     <div class="menu-wrapper" v-el:menu-wrapper>
       <ul>
-        <li v-for="item in goods" class="menu-item" :class="{'current':currentIndex === $index}">
+        <li v-for="item in goods" class="menu-item" :class="{'current':currentIndex === $index}" @click="_selectMenu($index,$event)">
           <span class="text">
             <span v-show="item.type>0" class="icon" :class="classMap[item.type]"></span>
             {{item.name}}
@@ -66,7 +66,8 @@
           let height1 = this.listHeight[i];
           let height2 = this.listHeight[i + 1];
           if (!height2 || (this.scrollY >= height1 && this.scrollY < height2)) {
-              return i;
+            // console.info(i);
+            return i;
           }
         }
         return 0;
@@ -74,6 +75,7 @@
     },
     created() {
       this.classMap = ['decrease', 'discount', 'special', 'invoice', 'guarantee'];
+
       this.$http.get('/api/goods').then((response) => {
         response = response.body;
         if (response.errno === ERR_OK) {
@@ -86,14 +88,24 @@
       });
     },
     methods: {
+      _selectMenu: function (index, event) { // 点击左侧导航联动
+        if (!event._constructed) {
+          return;   //  防止pc端派发两次事件
+        }
+        let foodList = this.$els.foodsWrapper.getElementsByClassName('food-list-hook');
+        let el = foodList[index];
+        this.foodsScroll.scrollToElement(el, 300);
+      },
       _initScroll: function () {  // 初始化滚动条插件
-        this.menuScroll = new BScroll(this.$els.menuWrapper, {});
+        this.menuScroll = new BScroll(this.$els.menuWrapper, {
+          click: true //  scroll插件会禁止掉原有的点击触摸等属性，所以要重新恢复一下
+        });
         this.foodsScroll = new BScroll(this.$els.foodsWrapper, {
           probeType: 3
         });
         this.foodsScroll.on('scroll', (pos) => {
           this.scrollY = Math.abs(Math.round(pos.y));
-          console.log(this.scrollY);
+          // console.log(this.scrollY);
         });
       },
       _calculateHeight: function () { // 计算滚动时页面高度
@@ -105,7 +117,7 @@
           height += item.clientHeight;
           this.listHeight.push(height); // 得到每个foodList的高度值，并存在数组里面
         }
-        console.log(this.listHeight);
+        // console.log(this.listHeight);
       }
     }
   };
