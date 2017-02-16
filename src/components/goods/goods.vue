@@ -37,6 +37,8 @@
         </li>
       </ul>
     </div>
+    <!--购物车-->
+    <shopcart :delivery-price="seller.deliveryPrice" :min-price="seller.minPrice"></shopcart>
   </div>
 </template>
 <style lang="stylus" rel="stylesheet/stylus">
@@ -44,6 +46,7 @@
   @import "goods.styl";
 </style>
 <script type="text/ecmascript-6">
+  import shopcart from '../shopcart/shopcart.vue';
   import BScroll from 'better-scroll';
 
   const ERR_OK = 0;
@@ -119,6 +122,9 @@
         }
         // console.log(this.listHeight);
       }
+    },
+    components: {
+      shopcart: shopcart
     }
   };
 </script>

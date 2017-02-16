@@ -13,7 +13,7 @@
       </div>
     </div>
     <!--刷新路由-->
-    <router-view></router-view>
+    <router-view :seller="seller"></router-view>
   </div>
 </template>
 
