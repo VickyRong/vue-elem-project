@@ -31,14 +31,18 @@
                 <div class="price">
                   <span class="now">￥{{food.price}}</span><span v-show="food.oldPrice" class="old">￥{{food.oldPrice}}</span>
                 </div>
+                <div class="cartcontrol-wrapper">
+                  <!--计数加减组件-->
+                  <cartcontrol :food="food"></cartcontrol>
+                </div>
               </div>
             </li>
           </ul>
         </li>
       </ul>
     </div>
-    <!--购物车-->
-    <shopcart :delivery-price="seller.deliveryPrice" :min-price="seller.minPrice"></shopcart>
+    <!--购物车组件-->
+    <shopcart :select-foods="selectFoods" :delivery-price="seller.deliveryPrice" :min-price="seller.minPrice"></shopcart>
   </div>
 </template>
 <style lang="stylus" rel="stylesheet/stylus">
@@ -47,6 +51,7 @@
 </style>
 <script type="text/ecmascript-6">
   import shopcart from '../shopcart/shopcart.vue';
+  import cartcontrol from '../cartcontrol/cartcontrol.vue';
   import BScroll from 'better-scroll';
 
   const ERR_OK = 0;
@@ -74,6 +79,17 @@
           }
         }
         return 0;
+      },
+      selectFoods() {
+        let foods = [];
+        this.goods.forEach((good) => {
+          good.foods.forEach((food) => {
+            if (food.count) {
+              foods.push(food);
+            }
+          });
+        });
+        return foods;
       }
     },
     created() {
@@ -104,6 +120,7 @@
           click: true //  scroll插件会禁止掉原有的点击触摸等属性，所以要重新恢复一下
         });
         this.foodsScroll = new BScroll(this.$els.foodsWrapper, {
+          click: true, //  scroll插件会禁止掉原有的点击触摸等属性，所以要重新恢复一下
           probeType: 3
         });
         this.foodsScroll.on('scroll', (pos) => {
@@ -124,7 +141,8 @@
       }
     },
     components: {
-      shopcart: shopcart
+      shopcart: shopcart,
+      cartcontrol: cartcontrol
     }
   };
 </script>
