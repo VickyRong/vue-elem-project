@@ -42,7 +42,7 @@
       </ul>
     </div>
     <!--购物车组件-->
-    <shopcart :select-foods="selectFoods" :delivery-price="seller.deliveryPrice" :min-price="seller.minPrice"></shopcart>
+    <shopcart v-ref:shopcart :select-foods="selectFoods" :delivery-price="seller.deliveryPrice" :min-price="seller.minPrice"></shopcart>
   </div>
 </template>
 <style lang="stylus" rel="stylesheet/stylus">
@@ -138,11 +138,23 @@
           this.listHeight.push(height); // 得到每个foodList的高度值，并存在数组里面
         }
         // console.log(this.listHeight);
+      },
+      _drop(target) { // 将接收到target事件传给子组件shopcart
+        // 体验优化，异步执行动画
+        this.$nextTick(() => {
+          this.$refs.shopcart.drop(target);
+        });
       }
     },
     components: {
       shopcart: shopcart,
       cartcontrol: cartcontrol
+    },
+    events: {
+      'cart.add'(target) { // 接收cartcontrol组件传过来的target事件
+        // console.info(target);
+        this._drop(target);
+      }
     }
   };
 </script>

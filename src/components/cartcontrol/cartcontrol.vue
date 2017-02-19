@@ -1,7 +1,7 @@
 <template>
   <div class="cartcontrol">
     <div class="cart-decrease " v-show="food.count>0" @click="desCart" transition="move">
-      <div class="inner icon-remove_circle_outline" ></div>
+      <div class="inner icon-remove_circle_outline"></div>
     </div>
     <div class="cart-count" v-show="food.count>0">{{food.count}}</div>
     <div class="cart-add icon-add_circle" @click="addCart"></div>
@@ -29,6 +29,7 @@
         } else {
           this.food.count++;
         }
+        this.$dispatch('cart.add', event.target);
       },
       desCart() { // 减
         if (this.food.count) {
