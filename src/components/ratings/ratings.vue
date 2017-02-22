@@ -1,5 +1,5 @@
 <template>
-  <div>我是评论区域2222</div>
+  <div>评论区域</div>
 </template>
 <style lang="stylus" rel="stylesheet/stylus">
 

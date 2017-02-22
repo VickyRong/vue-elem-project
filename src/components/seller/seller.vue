@@ -1,5 +1,5 @@
 <template>
-    <div>我是卖家区域3333</div>
+    <div>卖家区域</div>
 </template>
 <style lang="stylus" rel="stylesheet/stylus">
 
