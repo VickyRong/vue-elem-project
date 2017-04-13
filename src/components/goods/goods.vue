@@ -17,7 +17,7 @@
         <li v-for="item in goods" class="food-list food-list-hook">
           <h1 class="title">{{item.name}}</h1>
           <ul>
-            <li v-for="food in item.foods" class="food-item border-1px">
+            <li @click="selectFood(food,$event)" v-for="food in item.foods"  class="food-item border-1px">
               <div class="icon">
                 <img :src="food.icon" width="57" height="57">
               </div>
@@ -44,6 +44,8 @@
     <!--购物车组件-->
     <shopcart v-ref:shopcart :select-foods="selectFoods" :delivery-price="seller.deliveryPrice" :min-price="seller.minPrice"></shopcart>
   </div>
+  <!--food组件-->
+  <food :food = "selectedFood" v-ref:food></food>
 </template>
 <style lang="stylus" rel="stylesheet/stylus">
   @import "../../common/styles/mixin.styl";
@@ -52,6 +54,7 @@
 <script type="text/ecmascript-6">
   import shopcart from '../shopcart/shopcart.vue';
   import cartcontrol from '../cartcontrol/cartcontrol.vue';
+  import food from '../food/food.vue';
   import BScroll from 'better-scroll';
 
   const ERR_OK = 0;
@@ -65,7 +68,8 @@
       return {
         goods: [],
         listHeight: [],
-        scrollY: 0
+        scrollY: 0,
+        selectedFood: {}
       };
     },
     computed: {
@@ -144,11 +148,21 @@
         this.$nextTick(() => {
           this.$refs.shopcart.drop(target);
         });
+      },
+      selectFood(food, event) {
+        if (!event._constructed) {
+          return;   //  防止pc端派发两次事件
+        }
+        this.selectedFood = food;
+        this.$refs.food.show();
+        console.log(food);
+        console.log(event);
       }
     },
     components: {
-      shopcart: shopcart,
-      cartcontrol: cartcontrol
+      shopcart,
+      cartcontrol,
+      food
     },
     events: {
       'cart.add'(target) { // 接收cartcontrol组件传过来的target事件
